@@ -34,14 +34,23 @@ function getScripture(url){
 	type: 'get',
 	cache: false,
 	success: function(data){
-		$.each(data.Ephesians, function(chap, verses) {
+	var reg = /[^A-Za-z0-9 -]+ G[0-9]{2,6}/g;
+	var result = [];
+	$.each(data.Ephesians, function(chap, verses) {
       $.each(verses, function(verse, text) {
-        var newVerse = "<span verse='" + verse + "'>" + text.replace(/ [A-Z0-9-]{2,}| G[0-9]{1,5}|[\[\]]|{.*}/g, "") + '</span>';
+      	text = text.replace(/{.*}|[\[\]]/g, "");
+      	var newVerse = "<span verse='" + verse + "'>";
+      	while(result = reg.exec(text)){
+      		var a = result[0].split(" ");
+      		newVerse += "<span strong ='" + a[1].substring(1) + "'>" + a[0] + "</span> ";
+      	}
+      	newVerse += "</span>"
         data.Ephesians[chap][verse] = newVerse;
       });
     });
-		book = data;
-		displayScripture(data, chapterNumber);
+	book = data;
+	console.log(book);
+	displayScripture(data, chapterNumber);
 	}
 })
 }
@@ -55,7 +64,5 @@ function displayScripture(data, chapter){
 	$("#chapter").html("Chapter " + chapterNumber);
 	$("#scripture").html(chapterString);
 }
-
-//TODO: Add a parser function to strip and meta each word in our chapter
 
 });
