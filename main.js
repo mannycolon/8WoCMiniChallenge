@@ -4,6 +4,7 @@ $(document).ready(function() {
 var chapterNumber = 1;
 //Global variable book is assigned by getScripture
 var book;
+var lexicon = {};
 
 getScripture('Ephesians.json');
 
@@ -16,6 +17,11 @@ $("#nextChapter").click(function(){
 	displayScripture(book, chapterNumber);
 	}
 })
+
+$(document).mouseup(function() {
+	var selObj = window.getSelection();
+	console.log(selObj);
+});
 
 $("#previousChapter").click(function(){
 	if(chapterNumber >= 2){
@@ -59,8 +65,26 @@ function getScripture(url){
     });
 	book = data;
 	displayScripture(data, chapterNumber);
+	},
+	error: function(err) {
+		alert("Could not get Epheisans JSON data");
 	}
-})
+});
+$.ajax({
+	url: 'lexicon-eph-english.json',
+	dataType: 'json',
+	type: 'get',
+	cache: false,
+	success: function(data) {
+		for (var i = 0; i < data.length; i++) {
+			lexicon[data[i].strongs] = data[i];
+		}
+					console.log(lexicon);
+	},
+	error: function(err) {
+		alert("Could not get lexicon!");
+	}
+});
 }
 
 //Displays scripture to the screen given data and a chapter
