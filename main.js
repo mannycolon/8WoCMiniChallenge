@@ -24,6 +24,15 @@ $("#previousChapter").click(function(){
 	}
 })
 
+$("#goToChapter").click(function(){
+	var desiredChapter = parseInt($("#chapterBox").val());
+	if(desiredChapter <= 6 && desiredChapter >= 1){
+		chapterNumber = desiredChapter
+		displayScripture(book, chapterNumber);
+	}
+	console.log(chapterNumber);
+})
+
 //Makes the ajax call to the URL it is passed and displays the original scripture
 //Important that this displays something so that ajax is done by the time the user
 //clicks on the next chapter
@@ -49,7 +58,6 @@ function getScripture(url){
       });
     });
 	book = data;
-	console.log(book);
 	displayScripture(data, chapterNumber);
 	}
 })
