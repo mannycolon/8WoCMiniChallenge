@@ -16,11 +16,31 @@ $("#nextChapter").click(function(){
 	chapterNumber++;
 	displayScripture(book, chapterNumber);
 	}
-})
-
-$(document).mouseup(function() {
+});
+// Checks for new selection whenever the mouse is released
+$(document).mouseup(function(ev) {
 	var selObj = window.getSelection();
-	console.log(selObj);
+	var selection = selObj.toString();
+	// return if no selection made
+	if (selection == "") return;
+	document.execCommand('copy');
+	console.log(selection);
+	// regex to test for multiple words
+	var reg = /.+ .+/g;
+	// multi word selection
+	if (reg.test(selection) == true) {
+
+	}
+	else { // single word selection
+		var word = selection.replace(/ /g, "");
+		var strong = $(selObj.anchorNode.nextElementSibling).attr('strong');
+		var lex = lexicon[strong];
+		console.log("Strong : " + strong);
+		if (lex == undefined) {console.log("Lexicon entry not found"); return;}
+		var shortDef = lex.brief;
+		var morph = lex.morphology;
+		console.log(" Def: " + shortDef + " morph: " + morph);
+	}
 });
 
 $("#previousChapter").click(function(){
@@ -87,6 +107,9 @@ function displayScripture(data, chapter){
 	}
 	$("#chapter").html("Chapter " + chapterNumber);
 	$("#scripture").html(chapterString);
+	$("#scripture span span").dblclick(function(ev) {
+		console.log(ev.target);
+	});
 }
 
 });
