@@ -17,6 +17,11 @@ $("#nextChapter").click(function(){
 	}
 })
 
+$(document).mouseup(function() {
+	var selObj = window.getSelection();
+	console.log(selObj);
+});
+
 $("#previousChapter").click(function(){
 	if(chapterNumber >= 2){
 	chapterNumber--;
