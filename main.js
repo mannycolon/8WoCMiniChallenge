@@ -86,7 +86,7 @@ function getScripture(url){
 		book = data;
 		displayScripture(data, chapterNumber);
 		$('#scripture span span').each(function(index, span){
-			
+
 			$(span).opentip(' ', {delay:0, showOn: 'click', tipJoint: 'bottom', fixed: true, hideTrigger: "closeButton"});
 		});
 	},
