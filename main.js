@@ -1,43 +1,55 @@
 $(document).ready(function() {
 
+//Assuming we want to start at Chapter 1 this global is important
 var chapterNumber = 1;
-var verseNumber = 1;
+//Global variable book is assigned by getScripture
+var book;
 
-getScripture(chapterNumber, verseNumber);
+getScripture('Ephesians.json');
 
+//These add functionality to our previous and next chapter buttons
+//TODO: Take out the hardcoding on the 6 here so this funciton wou
+//ld work for any book we have the properly formatted JSON for
 $("#nextChapter").click(function(){
+	if(chapterNumber < 6){
 	chapterNumber++;
-	verseNumber = 1;
-	getScripture(chapterNumber,verseNumber);
+	displayScripture(book, chapterNumber);
+	}
 })
 
 $("#previousChapter").click(function(){
+	if(chapterNumber >= 2){
 	chapterNumber--;
-	verseNumber = 1;
-	getScripture(chapterNumber,verseNumber);
+	displayScripture(book, chapterNumber);
+	}
 })
 
-$("#nextVerse").click(function(){
-	verseNumber++;
-	getScripture(chapterNumber,verseNumber);
-})
-
-$("#previousVerse").click(function(){
-	verseNumber--;
-	getScripture(chapterNumber,verseNumber);
-})
-
-function getScripture(chapter, verse){
+//Makes the ajax call to the URL it is passed and displays the original scripture
+//Important that this displays something so that ajax is done by the time the user
+//clicks on the next chapter
+function getScripture(url){
 	$.ajax({
-	url: 'Ephesians.json',
+	url: url,
 	dataType: 'json',
 	type: 'get',
 	cache: false,
 	success: function(data){
-		$("#scripture").text(data["Ephesians"][chapterNumber][verseNumber]);
-		$("#chapter").text("Chapter " + chapterNumber + ", Verse " + verseNumber);
+		book = data;
+		displayScripture(data, chapterNumber);
 	}
 })
 }
+
+//Displays scripture to the screen given data and a chapter
+function displayScripture(data, chapter){
+	var chapterString;
+	for(verse in data["Ephesians"][chapter]){
+		chapterString += data["Ephesians"][chapter][verse];
+	}
+	$("#chapter").text("Chapter " + chapterNumber);
+	$("#scripture").text(chapterString);
+}
+
+//TODO: Add a parser function to strip and meta each word in our chapter
 
 });
