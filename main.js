@@ -1,16 +1,14 @@
 $(document).ready(function() {
 
-//Assuming we want to start at Chapter 1 this global is important
+
+//INITIALIZATION
 var chapterNumber = 1;
-//Global variable book is assigned by getScripture
 var book;
 var lexicon = {};
 
 getScripture('Ephesians.json');
 
-//These add functionality to our previous and next chapter buttons
-//TODO: Take out the hardcoding on the 6 here so this funciton wou
-//ld work for any book we have the properly formatted JSON for
+//HANDLE CLICK EVENTS
 $("#nextChapter").click(function(){
 	if(chapterNumber < 6){
 	chapterNumber++;
@@ -18,10 +16,12 @@ $("#nextChapter").click(function(){
 	}
 })
 
+
 $(document).mouseup(function() {
 	var selObj = window.getSelection();
 	console.log(selObj);
 });
+
 
 $("#previousChapter").click(function(){
 	if(chapterNumber >= 2){
@@ -29,6 +29,7 @@ $("#previousChapter").click(function(){
 	displayScripture(book, chapterNumber);
 	}
 })
+
 
 $("#goToChapter").click(function(){
 	var desiredChapter = parseInt($("#chapterBox").val());
@@ -39,9 +40,8 @@ $("#goToChapter").click(function(){
 	console.log(chapterNumber);
 })
 
-//Makes the ajax call to the URL it is passed and displays the original scripture
-//Important that this displays something so that ajax is done by the time the user
-//clicks on the next chapter
+//AJAX CALLS FOR BOOK AND LEXICON
+//First call gets and parses our JSON as well as adds metadata
 function getScripture(url){
 	$.ajax({
 	url: url,
@@ -49,27 +49,34 @@ function getScripture(url){
 	type: 'get',
 	cache: false,
 	success: function(data){
-	var reg = /[^A-Za-z0-9 -]+ G[0-9]{2,6}/g;
-	var result = [];
-	$.each(data.Ephesians, function(chap, verses) {
-      $.each(verses, function(verse, text) {
-      	text = text.replace(/{.*}|[\[\]]/g, "");
-      	var newVerse = "<span verse='" + verse + "'>";
-      	while(result = reg.exec(text)){
-      		var a = result[0].split(" ");
-      		newVerse += "<span strong ='" + a[1].substring(1) + "'>" + a[0] + "</span> ";
-      	}
-      	newVerse += "</span>"
-        data.Ephesians[chap][verse] = newVerse;
-      });
-    });
-	book = data;
-	displayScripture(data, chapterNumber);
+		var reg = /[^A-Za-z0-9 -]+ G[0-9]{2,6}/g;
+		var result = [];
+		$.each(data.Ephesians, function(chap, verses) {
+	      $.each(verses, function(verse, text) {
+	      	text = text.replace(/{.*}|[\[\]]/g, "");
+	      	var newVerse = "<span verse='" + verse + "'>";
+	      	while(result = reg.exec(text)){
+	      		var a = result[0].split(" ");
+	      		newVerse += "<span strong ='" + a[1].substring(1) + "'>" + a[0] + "</span> ";
+	      	}
+	      	newVerse += "</span>"
+	        data.Ephesians[chap][verse] = newVerse;
+	      });
+	    });
+		book = data;
+		displayScripture(data, chapterNumber);
+		$('#scripture span span').each(function(index, span){
+			
+			$(span).opentip(' ', {delay:0, showOn: 'click', tipJoint: 'bottom', fixed: true, hideTrigger: "closeButton"});
+		});
 	},
 	error: function(err) {
 		alert("Could not get Epheisans JSON data");
 	}
 });
+
+
+//This call gets and structures the lexicon
 $.ajax({
 	url: 'lexicon-eph-english.json',
 	dataType: 'json',
@@ -95,6 +102,7 @@ function displayScripture(data, chapter){
 	}
 	$("#chapter").html("Chapter " + chapterNumber);
 	$("#scripture").html(chapterString);
+
 }
 
 });
