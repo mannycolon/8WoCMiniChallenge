@@ -5,7 +5,9 @@ Opentip.styles.word = {
 	showOn: 'click', 
 	tipJoint: 'bottom', 
 	fixed: true, 
-	hideTrigger: "closeButton"
+	hideTrigger: "closeButton",
+	closeButtonRadius: 10,
+	offset: [0, -10]
 };
 
 //INITIALIZATION
@@ -24,7 +26,7 @@ $("#nextChapter").click(function(){
 });
 
 // Checks for new selection whenever the mouse is released
-$(document).mouseup(function(ev) {
+$("#scripture").mouseup(function(ev) {
 	var selObj = window.getSelection();
 	var selection = selObj.toString();
 	// return if no selection made
@@ -99,9 +101,6 @@ function getScripture(url){
 	    });
 		book = data;
 		displayScripture(data, chapterNumber);
-		// $('#scripture span span').each(function(index, span){
-		// 	$(span).opentip(' ', {delay:0, showOn: 'click', tipJoint: 'bottom', fixed: true, hideTrigger: "closeButton"});
-		// });
 	},
 	error: function(err) {
 		alert("Could not get Epheisans JSON data");
