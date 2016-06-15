@@ -34,6 +34,12 @@ function getScripture(url){
 	type: 'get',
 	cache: false,
 	success: function(data){
+		$.each(data.Ephesians, function(chap, verses) {
+      $.each(verses, function(verse, text) {
+        var newVerse = "<span verse='" + verse + "'>" + text.replace(/ [A-Z-]{2,}| G[0-9]{1,5}|[\[\]]|{.*}/g, "") + '</span>';
+        data.Ephesians[chap][verse] = newVerse;
+      });
+    });
 		book = data;
 		displayScripture(data, chapterNumber);
 	}
