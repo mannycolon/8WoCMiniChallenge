@@ -7,12 +7,21 @@
 		<link rel="stylesheet" type="text/css" href="styles.css">
 	</head>
 	<body>
+
 	<h1>Ephesians in Greek</h1>
 	<h3 id="chapter"></h3>
 
+	<nav>
+		<input type="text" id="chapterBox" value="Goto Chapter" onclick='javascript: this.value = ""' />
+		<button id="goToChapter">Go</button>
+	</nav>
+
 	<p id="scripture">Scripture goes here</p>
 
-	<button id="previousChapter">Previous Chapter</button>
-	<button id="nextChapter">Next Chapter</button>
+	<div id="clickNav">
+		<button id="previousChapter">Previous Chapter</button>
+		<button id="nextChapter">Next Chapter</button>
+	</div>
+
 	</body>
 </html>
