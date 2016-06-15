@@ -36,7 +36,7 @@ function getScripture(url){
 	success: function(data){
 		$.each(data.Ephesians, function(chap, verses) {
       $.each(verses, function(verse, text) {
-        var newVerse = "<span verse='" + verse + "'>" + text.replace(/ [A-Z-]{2,}| G[0-9]{1,5}|[\[\]]|{.*}/g, "") + '</span>';
+        var newVerse = "<span verse='" + verse + "'>" + text.replace(/ [A-Z0-9-]{2,}| G[0-9]{1,5}|[\[\]]|{.*}/g, "") + '</span>';
         data.Ephesians[chap][verse] = newVerse;
       });
     });
@@ -48,12 +48,12 @@ function getScripture(url){
 
 //Displays scripture to the screen given data and a chapter
 function displayScripture(data, chapter){
-	var chapterString;
+	var chapterString = "";
 	for(verse in data["Ephesians"][chapter]){
 		chapterString += data["Ephesians"][chapter][verse];
 	}
-	$("#chapter").text("Chapter " + chapterNumber);
-	$("#scripture").text(chapterString);
+	$("#chapter").html("Chapter " + chapterNumber);
+	$("#scripture").html(chapterString);
 }
 
 //TODO: Add a parser function to strip and meta each word in our chapter
