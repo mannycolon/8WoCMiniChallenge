@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+Opentip.styles.word = {
+	delay:0,
+	showOn: 'click',
+	tipJoint: 'bottom',
+	fixed: true,
+	hideTrigger: "closeButton"
+};
 
 //INITIALIZATION
 var chapterNumber = 1;
@@ -32,13 +39,20 @@ $(document).mouseup(function(ev) {
 	}
 	else { // single word selection
 		var word = selection.replace(/ /g, "");
-		var strong = $(selObj.anchorNode.nextElementSibling).attr('strong');
+		var strong = $(ev.target).attr('strong');
 		var lex = lexicon[strong];
 		console.log("Strong : " + strong);
-		if (lex == undefined) {console.log("Lexicon entry not found"); return;}
+		if (lex == undefined) {
+			console.log("Lexicon entry not found");
+			$(ev.target).opentip('definition unavailable', {style: "word"});
+			return;
+		}
 		var shortDef = lex.brief;
 		var morph = lex.morphology;
-		console.log(" Def: " + shortDef + " morph: " + morph);
+		$(ev.target).opentip("<b>" + word + "</b>" + " - "
+			+ shortDef
+			+ "<br></br><i>(" + morph + ")</i>" , {
+			style: "word"});
 	}
 });
 
@@ -106,7 +120,7 @@ $.ajax({
 		for (var i = 0; i < data.length; i++) {
 			lexicon[data[i].strongs] = data[i];
 		}
-					console.log(lexicon);
+		console.log(lexicon);
 	},
 	error: function(err) {
 		alert("Could not get lexicon!");
