@@ -6,6 +6,8 @@ Opentip.styles.word = {
 	tipJoint: 'bottom',
 	fixed: true,
 	hideTrigger: "closeButton"
+	closeButtonRadius: 10,
+	offset: [0, -10]
 };
 
 //INITIALIZATION
