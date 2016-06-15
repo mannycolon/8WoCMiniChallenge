@@ -4,6 +4,7 @@ $(document).ready(function() {
 var chapterNumber = 1;
 //Global variable book is assigned by getScripture
 var book;
+var lexicon = {};
 
 getScripture('Ephesians.json');
 
@@ -56,8 +57,26 @@ function getScripture(url){
 	book = data;
 	console.log(book);
 	displayScripture(data, chapterNumber);
+	},
+	error: function(err) {
+		alert("Could not get Epheisans JSON data");
 	}
-})
+});
+$.ajax({
+	url: 'lexicon-eph-english.json',
+	dataType: 'json',
+	type: 'get',
+	cache: false,
+	success: function(data) {
+		for (var i = 0; i < data.length; i++) {
+			lexicon[data[i].strongs] = data[i];
+		}
+					console.log(lexicon);
+	},
+	error: function(err) {
+		alert("Could not get lexicon!");
+	}
+});
 }
 
 //Displays scripture to the screen given data and a chapter
