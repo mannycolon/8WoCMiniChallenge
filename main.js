@@ -5,7 +5,7 @@ Opentip.styles.word = {
 	showOn: 'click',
 	tipJoint: 'bottom',
 	fixed: true,
-	hideTrigger: "closeButton"
+	hideTrigger: "closeButton",
 	closeButtonRadius: 10,
 	offset: [0, -10]
 };
