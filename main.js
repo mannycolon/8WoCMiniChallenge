@@ -24,7 +24,7 @@ $("#nextChapter").click(function(){
 });
 
 // Checks for new selection whenever the mouse is released
-$(document).mouseup(function(ev) {
+$("#scripture").mouseup(function(ev) {
 	var selObj = window.getSelection();
 	var selection = selObj.toString();
 	// return if no selection made
@@ -38,6 +38,7 @@ $(document).mouseup(function(ev) {
 
 	}
 	else { // single word selection
+		if ($(ev.target).data('opentips') != undefined) return;
 		var word = selection.replace(/ /g, "");
 		var strong = $(ev.target).attr('strong');
 		var lex = lexicon[strong];
@@ -99,10 +100,6 @@ function getScripture(url){
 	    });
 		book = data;
 		displayScripture(data, chapterNumber);
-		$('#scripture span span').each(function(index, span){
-
-			$(span).opentip(' ', {delay:0, showOn: 'click', tipJoint: 'bottom', fixed: true, hideTrigger: "closeButton"});
-		});
 	},
 	error: function(err) {
 		alert("Could not get Epheisans JSON data");
