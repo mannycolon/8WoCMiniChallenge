@@ -30,11 +30,9 @@ $("#nextChapter").click(function(){
 
 // Checks for new selection whenever the mouse is released
 $("#scripture").mouseup(function(ev) {
-	var selObj = window.getSelection();
-	var selection = selObj.toString();
+	var selection = window.getSelection().toString();
 	// return if no selection made
 	if (selection == "") return;
-	document.execCommand('copy');
 	// regex to test for multiple words
 	var reg = /.+ .+/g;
 	// multi word selection
@@ -57,8 +55,8 @@ $("#scripture").mouseup(function(ev) {
 		//Formatting the text in our tooltip to be displayed
 		$(ev.target).opentip("<b>" + word + "</b>" + " - "
 			+ shortDef
-			+ "<br></br><i>(" + morph + ")</i>" , {
-			style: "word"});
+			+ "<br></br><i>(" + morph + ")</i>" ,
+			{style: "word"});
 	}
 });
 
@@ -107,7 +105,7 @@ function getScripture(url){
 	      	//Adds the strong number to a strong container on the span and adds places the word in the wrapper
 	      	while(result = reg.exec(text)){
 	      		var a = result[0].split(" ");
-	      		newVerse += "<span strong ='" + a[1].substring(1) + "'>" + a[0] + "</span> ";
+	      		newVerse += "<span strong ='" + a[1].substring(1) + "'>" + a[0] + " </span>";
 	      	}
 
 	      	//Closing our span tag for the verse
@@ -115,9 +113,9 @@ function getScripture(url){
 	        data.Ephesians[chap][verse] = newVerse;
 	      });
 	    });
-		book = data;
 
 		//Update the view with data we got from our AJAX call
+		book = data;
 		displayScripture(data, chapterNumber);
 	},
 	error: function(err) {
@@ -139,7 +137,6 @@ $.ajax({
 		for (var i = 0; i < data.length; i++) {
 			lexicon[data[i].strongs] = data[i];
 		}
-		console.log(lexicon);
 	},
 	error: function(err) {
 		alert("Could not get lexicon!");
@@ -156,5 +153,34 @@ function displayScripture(data, chapter){
 	$("#chapter").html("Chapter " + chapterNumber);
 	$("#scripture").html(chapterString);
 }
+
+function appendSelection(){
+	var selObj = window.getSelection();
+	var verseStart = $(selObj.anchorNode.parentElement.parentElement).attr('verse');
+	var verseEnd = $(selObj.focusNode.parentElement.parentElement).attr('verse');
+	if(verseStart == verseEnd){
+		var selectionInfo = "Chapter: " + chapterNumber + " Verse: " + verseStart;
+	}else if(parseInt(verseStart) > parseInt(verseEnd)){
+		var temp = verseStart;
+		verseStart = verseEnd;
+		verseEnd = temp;
+		var selectionInfo = "Chapter: " + chapterNumber + " Verses: " + verseStart + "-" + verseEnd;
+	}else{
+		var selectionInfo = "Chapter: " + chapterNumber + " Verses: " + verseStart + "-" + verseEnd;
+	}
+	var copytext = selObj.toString() + " (" + selectionInfo + ")";
+	console.log(copytext);
+	var newdiv = document.createElement('div');
+		newdiv.style.position = 'absolute';
+		newdiv.style.left = '-99999px';
+
+	document.body.appendChild(newdiv);
+	newdiv.innerHTML = copytext;
+	selObj.selectAllChildren(newdiv);
+
+	window.setTimeout(function(){document.body.removeChild(newdiv);}, 100);
+}
+
+document.addEventListener('copy', appendSelection);
 
 });
