@@ -43,7 +43,7 @@ h3{
 nav {
 	padding: 1.5%;
 }
-nav button {
+#goToChapter {
 	background-color: #16a085;
 	border: none;
     color: white;
@@ -55,7 +55,21 @@ nav button {
     width: 7%
 }
 
-nav input {
+#chapterBox {
 	width: 90%;
-	color: #bdc3c7;
+}
+
+nav input:focus {
+	box-shadow: 0 1px 1px rgb(22, 160, 133) inset, 0 0 2px rgb(22, 160, 133);
+}
+
+.chapNum {
+	font-size: 160%;
+	font-weight: bolder;
+	font-style: bold;
+}
+
+.verseNum {
+	font-size: 75%;
+	font-style: italic;
 }

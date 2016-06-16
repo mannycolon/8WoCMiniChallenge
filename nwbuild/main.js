@@ -21,18 +21,6 @@ var lexicon = {};
 
 getScripture('Ephesians.json');
 
-//Handles mutable chapter bar up top
-$(window).scroll(function () {
-	console.log($(window).scrollTop());
-	if ($(window).scrollTop() > 120) {
-		$('#chapter').addClass('chapter-fixed');
-	}
-    if ($(window).scrollTop() < 120) {
-		$('#chapter').removeClass('chapter-fixed');
-	}
-});
-
-
 //go forward a chapter when clicked
 $("#nextChapter").click(function(){
 	if(chapterNumber < numOfChapters){
