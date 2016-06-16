@@ -8,7 +8,9 @@ Opentip.styles.word = {
 	fixed: true,
 	hideTrigger: "closeButton",
 	closeButtonRadius: 10,
-	offset: [0, -10]
+	offset: [0, -10],
+	closeButtonCrossSize: 10,
+	closeButtonLinkOverscan: 12
 };
 
 //INITIALIZATION
