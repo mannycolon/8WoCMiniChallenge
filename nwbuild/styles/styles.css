@@ -73,10 +73,3 @@ nav input:focus {
 	font-size: 75%;
 	font-style: italic;
 }
-
-.chapter-fixed {
-    top: 0;
-    z-index: 100;
-	position: fixed;
-    width: 100%;
-}
