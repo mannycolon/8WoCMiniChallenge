@@ -20,7 +20,7 @@ var lexicon = {};
 
 getScripture('Ephesians.json');
 
-//HANDLE CLICK EVENTS
+//go forward a chapter when clicked
 $("#nextChapter").click(function(){
 	if(chapterNumber < 6){
 	chapterNumber++;
@@ -68,17 +68,32 @@ $("#previousChapter").click(function(){
 	chapterNumber--;
 	displayScripture(book, chapterNumber);
 	}
-})
+});
 
-//Goes foward a chapter when clicked
-$("#goToChapter").click(function(){
-	var desiredChapter = parseInt($("#chapterBox").val());
-	if(desiredChapter <= 6 && desiredChapter >= 1){
-		chapterNumber = desiredChapter
-		displayScripture(book, chapterNumber);
+//Goes to specified section when clicked
+$("#searchForm").submit(function(ev){
+	ev.preventDefault();
+	var searchText = $("#chapterBox").val();
+	if (searchText == "") return;
+	var searchData = {};
+	// parse the search input into searchData
+	if (searchText.search("-") != -1) { // range
+		var ends = searchText.split("-");
+		var start = ends[0].split(":");
+		searchData.startChap = start[0];
+		if (start.length > 1) searchData.startVerse = start[1];
+		var end = ends[1].split(":");
+		searchData.endChap = end[0];
+		if (end.length > 1) searchData.endVerse = end[1];
+		}
+	else { // no range
+		var target = searchText.split(":");
+		searchData.startChap = target[0];
+		if (target.length > 1) searchData.startVerse = target[1];
 	}
-	console.log(chapterNumber);
-})
+	console.log(searchData);
+	displayScripture(book, searchData.startChap, searchData.startVerse, searchData.endChap, searchData.endVerse);
+});
 
 //AJAX CALLS FOR BOOK AND LEXICON
 //First call gets and parses our JSON as well as adds metadata
@@ -148,12 +163,26 @@ $.ajax({
 }
 
 //Displays scripture to the screen given data and a chapter
-function displayScripture(data, chapter){
+function displayScripture(data, startChap, startVerse, endChap, endVerse){
 	var chapterString = "";
-	for(verse in data["Ephesians"][chapter]){
-		chapterString += data["Ephesians"][chapter][verse];
+	if (endChap == undefined) endChap = startChap;
+	if (endChap < startChap) { // swap if need b
+		var temp = endChap;
+		endChap = startChap;
+		startChap = temp;
+		temp = endVerse;
+		endVerse = startVerse;
+		startVerse = temp;
 	}
-	$("#chapter").html("Chapter " + chapterNumber);
+	for (var chap = startChap; chap <= endChap; chap++) {
+		chapterString += '<span chapter="' + chap + '" verse="1" class="chapNum">' + chap + '</span> ';
+		for(verse in data["Ephesians"][chap]){
+			chapterString += '<span verse="' + verse + '" class="verseNum">' + verse + '</span> ';
+			chapterString += data["Ephesians"][chap][verse];
+		}
+	}
+
+	$("#chapter").html("Chapter " + startChap + ((startChap == endChap) ? "" : ("-" + endChap)));
 	$("#scripture").html(chapterString);
 }
 

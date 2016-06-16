@@ -14,8 +14,10 @@
 	<h3 id="chapter"></h3>
 
 	<nav>
-		<input type="text" id="chapterBox" value="Goto Chapter" onclick='javascript: this.value = ""' />
-		<button id="goToChapter">Go</button>
+	<form id="searchForm">
+		<input type="text" id="chapterBox" placeholder="2, 3:5, 2:5-3:9, etc." pattern="^[1-9]*(?::[1-9]+)?(-[1-9]+(?::[1-9]+)?)?$" /></input>
+		<input type="submit" id="goToChapter" value="Go"></input>
+	</form>
 	</nav>
 
 	<p id="scripture">Scripture goes here</p>
