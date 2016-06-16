@@ -15,6 +15,7 @@ Opentip.styles.word = {
 
 //INITIALIZATION
 var chapterNumber = 1;
+var numOfChapters;
 var book;
 var lexicon = {};
 
@@ -22,11 +23,35 @@ getScripture('Ephesians.json');
 
 //HANDLE CLICK EVENTS
 $("#nextChapter").click(function(){
-	if(chapterNumber < 6){
-	chapterNumber++;
-	displayScripture(book, chapterNumber);
+	if(chapterNumber < numOfChapters){
+		chapterNumber++;
+		displayScripture(book, chapterNumber);
+	}else{
+		chapterNumber = 1;
+		displayScripture(book, chapterNumber);
 	}
 });
+
+//Goes back a chapter when clicked
+$("#previousChapter").click(function(){
+	if(chapterNumber >= 2){
+		chapterNumber--;
+		displayScripture(book, chapterNumber);
+	}else{
+		chapterNumber = numOfChapters;
+		displayScripture(book, chapterNumber);
+	}
+})
+
+//Goes foward a chapter when clicked
+$("#goToChapter").click(function(){
+	var desiredChapter = parseInt($("#chapterBox").val());
+	if(desiredChapter <= 6 && desiredChapter >= 1){
+		chapterNumber = desiredChapter
+		displayScripture(book, chapterNumber);
+	}
+	console.log(chapterNumber);
+})
 
 // Checks for new selection whenever the mouse is released
 $("#scripture").mouseup(function(ev) {
@@ -59,24 +84,6 @@ $("#scripture").mouseup(function(ev) {
 			{style: "word"});
 	}
 });
-
-//Goes back a chapter when clicked
-$("#previousChapter").click(function(){
-	if(chapterNumber >= 2){
-	chapterNumber--;
-	displayScripture(book, chapterNumber);
-	}
-})
-
-//Goes foward a chapter when clicked
-$("#goToChapter").click(function(){
-	var desiredChapter = parseInt($("#chapterBox").val());
-	if(desiredChapter <= 6 && desiredChapter >= 1){
-		chapterNumber = desiredChapter
-		displayScripture(book, chapterNumber);
-	}
-	console.log(chapterNumber);
-})
 
 //AJAX CALLS FOR BOOK AND LEXICON
 //First call gets and parses our JSON as well as adds metadata
@@ -116,6 +123,7 @@ function getScripture(url){
 
 		//Update the view with data we got from our AJAX call
 		book = data;
+		numOfChapters = Object.keys(book.Ephesians).length;
 		displayScripture(data, chapterNumber);
 	},
 	error: function(err) {
